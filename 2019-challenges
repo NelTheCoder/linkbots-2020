@@ -1,0 +1,80 @@
+#include <linkbot.h>
+#include <arduino.h>
+CLinkbotI robot;
+double r = 1.75;
+double trackWidth = 3.69;
+float challengeNum = 0;
+float distanceFromFinishLine;
+bool givenProperChallengeNum = false;
+
+int smooth(int x,int y, int z){
+    
+robot.setJointSpeeds(x, NaN, y);
+robot.driveTime(z);
+return 0;    
+    }
+int main(void){
+    while (!givenProperChallengeNum)
+    {
+        printf("Please enter what challenge you would like to perform: ");
+        scanf("%f", &challengeNum);
+        if(challengeNum > 0 && challengeNum < 12)
+        {
+            givenProperChallengeNum = true;
+        }
+    }
+    
+    
+    
+    
+    
+    
+    if(challengeNum == 1){
+        printf("Enter whole number less than 36: ");
+        scanf("%f", &distanceFromFinishLine);
+        
+        //go forward distance from finish line - 2 inches
+        robot.driveDistance(distanceFromFinishLine - 1.5, r);
+        
+        //pause for a second
+        delay(1000);
+        
+        //go past finish line
+        robot.driveDistance(4, r);
+        /*//go forward two inches behind finish line
+        smooth(200,200,3);
+        //pause for a moment
+        //go past finish line
+        smooth(360, 360, 3);*/
+    }   
+    
+    
+    else if(challengeNum == 11){    
+        smooth(140, 355, 3);
+        smooth(360,360, 2);
+        smooth(120, 200, 2);
+        smooth(360, 360, 4);
+        robot.turnLeft(47, r, trackWidth); 
+        smooth(360, 360, 4.1);
+        smooth(114, 325, 3);
+        smooth(360, 360, 7);
+    }
+    /*switch(challengeNum)
+    {
+        case 1:
+            smooth(200, 200, 3);
+            break;
+        case 11:
+            smooth(140, 355, 3);
+            smooth(360, 360, 2);
+            smooth(120, 200, 2);
+            smooth(360, 360, 4.1);
+            robot.turnLeft(47, r, trackWidth);
+            smooth(360, 360, 4.1);
+            smooth(114, 325, 3);
+            smooth(360, 360, 7);
+            break;
+        default:
+            break;
+    }*/
+}
