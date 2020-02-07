@@ -1,10 +1,12 @@
 #include <linkbot.h>
-#include <arduino.h>
-CLinkbotI robot;
+
+CLinkbotI robot, robot1;
+
 double r = 1.75;
 double trackWidth = 3.69;
 float challengeNum = 0;
 float distanceFromFinishLine;
+float randProportion;
 bool givenProperChallengeNum = false;
 
 int smooth(int x,int y, int z){
@@ -24,11 +26,6 @@ int main(void){
         }
     }
     
-    
-    
-    
-    
-    
     if(challengeNum == 1){
         printf("Enter whole number less than 36: ");
         scanf("%f", &distanceFromFinishLine);
@@ -47,9 +44,17 @@ int main(void){
         //go past finish line
         smooth(360, 360, 3);*/
     }   
+    else if(challengeNum == 2)
+    {
+        printf("Enter the random proportion: ");
+        scanf("%f", &randProportion);
+
+        robot.driveDistanceNB(36 * randProportion, radius);
+        robot1.driveDistance(36 - (36 * randProportion), radius);
+    }
     
-    
-    else if(challengeNum == 11){    
+    else if(challengeNum == 11)
+    {    
         smooth(140, 355, 3);
         smooth(360,360, 2);
         smooth(120, 200, 2);
@@ -59,22 +64,4 @@ int main(void){
         smooth(114, 325, 3);
         smooth(360, 360, 7);
     }
-    /*switch(challengeNum)
-    {
-        case 1:
-            smooth(200, 200, 3);
-            break;
-        case 11:
-            smooth(140, 355, 3);
-            smooth(360, 360, 2);
-            smooth(120, 200, 2);
-            smooth(360, 360, 4.1);
-            robot.turnLeft(47, r, trackWidth);
-            smooth(360, 360, 4.1);
-            smooth(114, 325, 3);
-            smooth(360, 360, 7);
-            break;
-        default:
-            break;
-    }*/
 }
