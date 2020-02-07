@@ -1,4 +1,5 @@
 #include <linkbot.h>
+#include <stdio.h>
 
 CLinkbotI robot, robot1;
 
@@ -6,8 +7,8 @@ double r = 1.75;
 double trackWidth = 3.69;
 float challengeNum = 0;
 float distanceFromFinishLine;
-float randProportion;
-bool givenProperChallengeNum = false;
+float randProportion = 0;
+int givenProperChallengeNum = 0;
 
 int smooth(int x,int y, int z){
     
@@ -16,13 +17,13 @@ robot.driveTime(z);
 return 0;    
     }
 int main(void){
-    while (!givenProperChallengeNum)
+    while (givenProperChallengeNum == 0)
     {
         printf("Please enter what challenge you would like to perform: ");
         scanf("%f", &challengeNum);
         if(challengeNum > 0 && challengeNum < 12)
         {
-            givenProperChallengeNum = true;
+            givenProperChallengeNum = 1;
         }
     }
     
@@ -49,8 +50,8 @@ int main(void){
         printf("Enter the random proportion: ");
         scanf("%f", &randProportion);
 
-        robot.driveDistanceNB(36 * randProportion, radius);
-        robot1.driveDistance(36 - (36 * randProportion), radius);
+        robot.driveDistanceNB(36 * randProportion, r);
+        robot1.driveDistance((1 - randProportion) * 36, r);
     }
     
     else if(challengeNum == 11)
