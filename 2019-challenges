@@ -5,6 +5,8 @@ CLinkbotI robot, robot1;
 
 double r = 1.75;
 double trackWidth = 3.69;
+double x, y, y1, z;
+double distanceBetweenBots;
 float challengeNum = 0;
 float distanceFromFinishLine;
 float randProportion = 0;
@@ -53,8 +55,34 @@ int main(void){
         robot.driveDistanceNB(36 * randProportion, r);
         robot1.driveDistance((1 - randProportion) * 36, r);
     }
-    
-    else if(challengeNum == 11)
+    else if(challengeNum == 3)
+    {
+        return;
+    }
+    else if(challengeNum == 4)
+    {
+        //robot 1 starts driving forward
+        robot.driveForeverNB();
+        //get speed data for robot 2 - should be basically 0
+        robot1.getAccelerometerData(x, y, z);
+        //y is baseline, y1 is variable that is being updated
+        y1=y;
+        
+        //while the robot is not moving
+        while(abs(y1-y) < 0.03)
+        {
+            //keep updating accelerometer data for y1
+            robot1.getAccelerometerData(x, y1, z);
+        }
+        //the two bots have collided
+        //stop robot 1
+        robot.holdJoints();
+        //see how far robot 1 traveled
+        robot.getDistance(distanceBetweenBots, r);
+        //output
+        printf("The two robots were %.21f inches apart", distanceBetweenBots);
+    }
+    else if(challengeNum == 9)
     {    
         smooth(140, 355, 3);
         smooth(360,360, 2);
