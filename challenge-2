@@ -1,0 +1,15 @@
+#include <linkbot.h>
+
+CLinkbotI robot, robot1;
+
+double r = 1.75;
+float randProportion;
+
+void challenge2()
+{
+  printf("Enter the random proportion: ");
+  scanf("%f", &randProportion);
+  
+  robot.driveDistanceNB(36 * randProportion, r);
+  robot1.driveDistance((1- randProportion) * 36, r);
+}
