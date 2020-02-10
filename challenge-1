@@ -1,0 +1,18 @@
+#include <linkbot.h>
+
+CLinkbotI robot;
+
+double r = 1.75
+float distanceFromFinishLine;
+
+void challenge1()
+{
+  printf("Enter whole number less than 36");
+  scanf("%f", &distanceFromFinishLine);
+  
+  robot.driveDistance(distanceFromFinishLine - 1.5, r);
+  
+  delay(1000);
+  
+  robot.driveDistance(4, r);
+}
