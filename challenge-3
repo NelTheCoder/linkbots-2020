@@ -1,1 +1,43 @@
-//work on challenge 3
+#include <linkbot.h>
+#include <chplot.h>
+
+CLinkbotI hareBot, tortoiseBot;
+
+double r = 1.75;
+float distanceToTheRight, timeHareStops;
+int numDataPoints1, numDataPoints2;
+
+robotRecordData_t timedata1, distances1;
+robotRecordData_t timedata2, distances2;
+
+int main()
+{
+	robot.resetToZeroNB();
+	robot1.resetToZero();
+	printf("How many inches to the right of 36 in? ");
+	scanf("%f", &distanceToTheRight);
+	printf("How long should hareBot rest (in seconds)? ");
+	scanf("%f", &timeHareStops);
+	
+	float distanceFromFLAtStart = 37 - distanceToTheRight;
+	
+	tortoiseBot.setSpeed(1, r);
+	hareBot.setSpeed(distanceFromFLAtStart/(distanceFromFLAtStart - timeHareStops), r);
+	hareBot.recordNoDataShift();
+	tortoiseBot.recordNoDataShift();
+	hareBot.recordDistanceBegin(timedata1, distances1, r, 0.1);
+	tortoiseBot.recordDistanceBegin(timedata2, distances2, r, 0.1);
+
+	
+	tortoiseBot.driveDistanceNB(distanceFromFLAtStart, r);
+	hareBot.driveDistance(distanceFromFLAtStart / 2, r);
+	
+	hareBot.delaySeconds(1000 * timeHareStops);
+	
+	hareBot.driveDistance(distanceFromFLAtStart / 2, r);
+	
+	hareBot.recordDistanceEnd(numDataPoints1);
+	tortoiseBot.recordDistanceEnd(numDataPoints2);
+	
+	plot.title("");
+}
