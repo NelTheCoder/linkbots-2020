@@ -1,0 +1,14 @@
+#include <linkbot.h>
+
+CLinkbotI robot, robot1;
+
+double r = 1.75;
+double x, y, y1, z;
+double distanceTravelled;
+
+void challenge4()
+{
+  robot.driveForeverNB();
+  robot1.getAccelerometerData(x, y, z)
+  y1 = y;
+}
