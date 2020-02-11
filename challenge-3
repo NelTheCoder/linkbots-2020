@@ -2,18 +2,20 @@
 #include <chplot.h>
 
 CLinkbotI hareBot, tortoiseBot;
+CPlot plot;
 
 double r = 1.75;
 float distanceToTheRight, timeHareStops;
 int numDataPoints1, numDataPoints2;
+
 
 robotRecordData_t timedata1, distances1;
 robotRecordData_t timedata2, distances2;
 
 int main()
 {
-	robot.resetToZeroNB();
-	robot1.resetToZero();
+	hareBot.resetToZeroNB();
+	tortoiseBot.resetToZero();
 	printf("How many inches to the right of 36 in? ");
 	scanf("%f", &distanceToTheRight);
 	printf("How long should hareBot rest (in seconds)? ");
@@ -25,19 +27,26 @@ int main()
 	hareBot.setSpeed(distanceFromFLAtStart/(distanceFromFLAtStart - timeHareStops), r);
 	hareBot.recordNoDataShift();
 	tortoiseBot.recordNoDataShift();
-	hareBot.recordDistanceBegin(timedata1, distances1, r, 0.1);
-	tortoiseBot.recordDistanceBegin(timedata2, distances2, r, 0.1);
+	hareBot.recordDistanceBegin(timedata1, distances1, r, 5);
+	tortoiseBot.recordDistanceBegin(timedata2, distances2, r, 5);
 
 	
 	tortoiseBot.driveDistanceNB(distanceFromFLAtStart, r);
 	hareBot.driveDistance(distanceFromFLAtStart / 2, r);
 	
-	hareBot.delaySeconds(1000 * timeHareStops);
+	delay(1000 * timeHareStops);
 	
 	hareBot.driveDistance(distanceFromFLAtStart / 2, r);
 	
 	hareBot.recordDistanceEnd(numDataPoints1);
 	tortoiseBot.recordDistanceEnd(numDataPoints2);
 	
-	plot.title("");
+	plot.title("Distance vs Time for HareBot and TortoiseBot");
+    plot.label(PLOT_AXIS_X, "Time (seconds)");
+    plot.label(PLOT_AXIS_Y, "Distance (inches)");
+    plot.data2DCurve(timedata2, distances2, numDataPoints2);
+    plot.legend("TortoiseBot", 0);
+    plot.data2DCurve(timedata1, distances1, numDataPoints1);
+    plot.legend("HareBot", 0);
+    plot.plotting();
 }
