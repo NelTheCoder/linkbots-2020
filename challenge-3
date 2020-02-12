@@ -12,7 +12,7 @@ int numDataPoints1, numDataPoints2;
 robotRecordData_t timedata1, distances1;
 robotRecordData_t timedata2, distances2;
 
-int main()
+void challenge3()
 {
 	hareBot.resetToZeroNB();
 	tortoiseBot.resetToZero();
@@ -25,10 +25,14 @@ int main()
 	
 	tortoiseBot.setSpeed(1, r);
 	hareBot.setSpeed(distanceFromFLAtStart/(distanceFromFLAtStart - timeHareStops), r);
+    
 	hareBot.recordNoDataShift();
 	tortoiseBot.recordNoDataShift();
-	hareBot.recordDistanceBegin(timedata1, distances1, r, 5);
-	tortoiseBot.recordDistanceBegin(timedata2, distances2, r, 5);
+    
+    hareBot.recordDistanceOffset(distanceToTheRight);
+    tortoiseBot.recordDistanceOffset(distanceToTheRight);
+	hareBot.recordDistanceBegin(timedata1, distances1, r, 6);
+	tortoiseBot.recordDistanceBegin(timedata2, distances2, r, 6);
 
 	
 	tortoiseBot.driveDistanceNB(distanceFromFLAtStart, r);
@@ -47,6 +51,6 @@ int main()
     plot.data2DCurve(timedata2, distances2, numDataPoints2);
     plot.legend("TortoiseBot", 0);
     plot.data2DCurve(timedata1, distances1, numDataPoints1);
-    plot.legend("HareBot", 0);
+    plot.legend("HareBot", 1);
     plot.plotting();
 }
