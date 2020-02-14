@@ -1,0 +1,35 @@
+#include <linkbot.h>
+#include <stdio.h>
+
+CLinkbotI CarryBot;
+
+double r = 1.75;
+double trackWidth = 3.69;
+char parkingSpaceLetter;
+float parkingSpaceNumber;
+
+/*
+piggy bot drives onto carry bot
+
+carrybot goes backwards, turns, and moves, so that it is right in front of 'Z0'
+
+goes right and left to line up with number
+
+carry bot moves in front of parking space
+
+piggy back bot drives off platform onto parking space
+*/
+
+int main()
+{
+    printf("What parking number (0, 1, 2, or 3)? ");
+    scanf("%f", &parkingSpaceNumber);
+    printf("What parking letter (V, W, X, Y, Z)? ");
+    scanf("%c", &parkingSpaceLetter);
+    //drive onto bot
+    delay(2500);
+    CarryBot.driveDistance(-8, r);
+    CarryBot.turnLeft(145, r, trackWidth);
+    CarryBot.driveDistance(-10, r);
+    //in ront of 'Z0'
+}
