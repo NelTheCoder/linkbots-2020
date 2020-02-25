@@ -1,0 +1,402 @@
+#include <linkbot.h>
+#include <stdio.h>
+#include <arduino.h>
+
+CLinkbotI robot, robot1;
+int firstPosition;
+char direction;
+char boxLetter;
+char bot1Letter;
+char clolor;
+char currentParkingLetter = 'v' ;
+char currentParkingFaceDirection = 'l';
+double r = 1.75;
+double trackWidth = 3.69;
+double x, y, y1, z;
+double distanceBetweenBots;
+float challengeNum = 0;
+float distanceFromFinishLine;
+float randProportion = 0;
+int givenProperChallengeNum = 0;
+int dontKnow = 45;
+int currentParkingNum = 4;
+int meaningfull = 147;
+int boxNum;
+int bot1Num;
+int smooth(int x,int y, int z)
+{
+robot.setJointSpeeds(x, NaN, y);
+robot.driveTime(z);
+return 0;   
+   }
+int addLetter(void)
+   {
+        if (currentParkingLetter == 'v'){
+            currentParkingLetter = 'w';
+        }
+        else if(currentParkingLetter == 'w'){
+            currentParkingLetter = 'x';
+        }
+        else if(currentParkingLetter == 'x'){
+            currentParkingLetter = 'y';
+        }
+        else if(currentParkingLetter == 'y'){
+            currentParkingLetter = 'z';
+        }
+        else
+            {
+            robot.setLEDColor("red");
+            
+            }
+            return(0);
+    }
+int correctSolution(int ds,int de,int dn,int dw,int dse, int dsw,int dne, int dnw, int dnwse){
+ for( y = 0; y < 2; y++){
+smooth(dontKnow,meaningfull,1);
+delay(dse);
+smooth(dontKnow,meaningfull,1);
+delay(de);
+smooth(dontKnow,meaningfull,1);
+delay(dne);
+smooth(dontKnow,meaningfull,1);
+delay(dn);
+smooth(dontKnow,meaningfull,1);
+delay(dnwse);
+smooth(meaningfull,dontKnow,1);
+delay(ds);
+smooth(meaningfull,dontKnow,1);
+delay(dsw);
+smooth(meaningfull,dontKnow,1);
+delay(dw);
+smooth(meaningfull,dontKnow,1);
+delay(dnw);
+smooth(meaningfull,dontKnow,1);    
+delay(dn);
+smooth(meaningfull,dontKnow,1);
+delay(dne);
+smooth(meaningfull,dontKnow,1);
+delay(de);
+smooth(meaningfull,dontKnow,1);
+delay(dnwse);
+smooth(dontKnow,meaningfull,1);
+delay(dw);
+smooth(dontKnow,meaningfull,1);
+delay(dsw);
+smooth(dontKnow,meaningfull,1);
+delay(ds);
+
+ }
+  return(0);  
+}
+
+int main(void){
+   while (givenProperChallengeNum == 0)
+   {
+       printf("Please enter what challenge you would like to perform: ");
+       scanf("%f", &challengeNum);
+       if(challengeNum > 0 && challengeNum < 12)
+       {
+           givenProperChallengeNum = 1;
+       }
+   }
+   if(challengeNum == 1){
+       printf("Enter whole number less than 36: ");
+       scanf("%f", &distanceFromFinishLine);
+      
+       //go forward distance from finish line - 2 inches
+       robot.driveDistance(distanceFromFinishLine - 1.5, r);
+      
+       //pause for a second
+       delay(1000);
+      
+       //go past finish line
+       robot.driveDistance(4, r);
+       /*//go forward two inches behind finish line
+       smooth(200,200,3);
+       //pause for a moment
+       //go past finish line
+       smooth(360, 360, 3);*/
+   }  
+   else if(challengeNum == 2)
+   {
+       printf("Enter the random proportion: ");
+       scanf("%f", &randProportion);
+
+       robot.driveDistanceNB(36 * randProportion, r);
+       robot1.driveDistance((1 - randProportion) * 36, r);
+   }
+
+   else if(challengeNum == 3)
+   {
+     robot.driveDistance(5, r);
+    robot.driveDistance(5 , r);
+   }
+
+
+   else if(challengeNum == 4)
+   {
+       //robot 1 starts driving forward
+       robot.driveForeverNB();
+       //get speed data for robot 2 - should be basically 0
+       robot1.getAccelerometerData(x, y, z);
+       //y is baseline, y1 is variable that is being updated
+       y1=y;
+      
+       //while the robot is not moving
+       while(abs(y1-y) < 0.03)
+       {
+           //keep updating accelerometer data for y1
+           robot1.getAccelerometerData(x, y1, z);
+       }
+       //the two bots have collided
+       //stop robot 1
+       robot.holdJoints();
+       //see how far robot 1 traveled
+       robot.getDistance(distanceBetweenBots, r);
+       //output
+       printf("The two robots were %.21f inches apart", distanceBetweenBots);
+   }
+else if(challengeNum == 5)
+{   
+    printf("Enter direction needs to stop(se = r, sw = t, ne = y, nw = u : ");
+    scanf(" %c" , &direction);
+     if (direction == 's' )
+    {
+        correctSolution(3000, 0, 0, 0, 0, 0, 0, 0, 0);
+    }
+    else if (direction == 'e' )
+    {
+        correctSolution(0, 3000, 0, 0, 0, 0, 0, 0, 0);
+    }
+    else if (direction == 'n')
+    {
+        correctSolution(0, 0, 3000, 0, 0, 0, 0, 0, 0);
+    }
+    else if (direction == 'w')
+    {
+    correctSolution(0, 0, 0, 3000, 0, 0, 0, 0, 0);
+    }    
+    else if (direction == 'r' )
+    {
+        correctSolution(0, 0, 0, 0, 3000, 0, 0, 0, 3000);
+    }
+    else if (direction == 't')
+    {
+    correctSolution(0, 0, 0, 0, 0, 3000, 0, 0, 0);
+    }
+    else if (direction == 'y' )
+    {
+    correctSolution(0, 0, 0, 0, 0, 0, 3000, 0, 0);
+    }
+    else if (direction == 'u' )
+    {
+    correctSolution(0, 0, 0, 0, 0, 0, 0, 3000, 3000);
+    }
+    else
+    {
+        printf("no");
+    }
+}
+
+else if(challengeNum == 7)
+   {
+    printf(" enter first position ");
+    scanf( "%i", &firstPosition);    
+   if (firstPosition == 1){
+        
+     
+       robot.turnLeft(90, r, trackWidth);
+       robot.setSpeed(100 , r);
+       robot.driveTime(0.67);
+        robot.turnRight(90, r, trackWidth);
+       robot.driveTime(3);
+
+        }
+        else if (firstPosition == 2){
+        
+       robot.setSpeed(200 , r);
+       robot.driveTime(3);
+        }
+
+
+    else if (firstPosition == 3){
+        
+       robot.turnRight(90, r, trackWidth);
+       robot.setSpeed(100 , r);
+       robot.driveTime(0.67);
+        robot.turnLeft(90, r, trackWidth);
+       robot.driveTime(3);
+        }
+
+          else if (firstPosition == 4){
+        
+       robot.turnLeft(90, r, trackWidth);
+       robot.setSpeed(100 , r);
+       robot.driveTime(1.333);
+        robot.turnRight(90, r, trackWidth);
+       robot.driveTime(1);
+        robot.turnRight(90, r, trackWidth);
+       robot.driveTime(3);
+        }
+           else if (firstPosition == 5){
+        
+       robot.turnLeft(90, r, trackWidth);
+       robot.setSpeed(100 , r);
+       robot.driveTime(1.333);
+        robot.turnRight(90, r, trackWidth);
+       robot.driveTime(1.6);
+        robot.turnRight(80, r, trackWidth);
+       robot.driveTime(3);
+        }
+        
+    else if (firstPosition == 6){
+        
+       robot.turnLeft(90, r, trackWidth);
+       robot.setSpeed(100 , r);
+       robot.driveTime(2);
+        robot.turnRight(90, r, trackWidth);
+       robot.driveTime(2);
+        robot.turnRight(80, r, trackWidth);
+       robot.driveTime(3);
+    }
+    else if (firstPosition == 7){
+        
+       robot.turnLeft(35, r, trackWidth);
+        robot.setSpeed(100 , r);
+       robot.driveTime(3);
+      robot.driveDistance(-4 , r);
+       robot.turnRight(35, r, trackWidth);
+       robot.driveTime(1);
+       robot.turnRight(90, r, trackWidth);
+         robot.driveTime(1.3);
+          robot.turnRight(30, r, trackWidth);
+           robot.driveTime(3);
+        }
+       else if (firstPosition == 8){
+        
+       robot.turnRight(35, r, trackWidth);
+        robot.setSpeed(100 , r);
+       robot.driveTime(3);
+      robot.driveDistance(-4 , r);
+       robot.turnLeft(35, r, trackWidth);
+       robot.driveTime(1);
+       robot.turnLeft(90, r, trackWidth);
+         robot.driveTime(1.3);
+          robot.turnLeft(30, r, trackWidth);
+           robot.driveTime(3);
+        }
+    else
+        {
+         printf("no");   
+        }
+    }
+    
+else if(challengeNum == 8)
+    {
+       
+        printf("enter box letter than number then target letter then target number: ");
+        scanf( " %c ,%i  %c ,%i"  , &boxLetter, &boxNum,  &bot1Letter, &bot1Num);
+        printf("ok, box position is %c %i %c %i", boxLetter, boxNum  &bot1Letter, &bot1Num);
+        if(currentParkingNum < bot1Num && currentParkingFaceDirection == 'l' )
+        {
+           robot.driveDistance(4 , r);
+            currentParkingNum--;
+        }
+        
+        else if(boxNum == currentParkingNum - 1 && boxLetter == currentParkingLetter && currentParkingNum < bot1Num &&  currentParkingFaceDirection == 'l')
+        {
+            robot.turnLeft(90, r, trackWidth);
+            robot.driveDistance(4 , r);
+            robot.turnRight(90, r, trackWidth);
+            robot.driveDistance(4, r);
+            currentParkingNum--;
+            addLetter;
+            if(currentParkingNum < bot1Num && currentParkingFaceDirection == 'l' )
+            {
+                robot.driveDistance(4, r);
+                currentParkingNum--;
+            }
+            else
+            {
+               robot.setLEDColor("red");
+            }
+        }
+        else if(currentParkingNum == bot1Num)
+        {
+            robot.turnLeft(90, r, trackWidth);
+            currentParkingFaceDirection = 'd';
+        }
+        
+        else
+        {
+                robot.setLEDColor("red");
+        }
+        if(currentParkingLetter != bot1Letter && currentParkingFaceDirection == 'd' )
+            {
+            robot.driveDistance(4, r);
+            addLetter;
+            }
+        else if(currentParkingLetter == 'v' && boxLetter == 'w' && currentParkingNum == 0 && boxNum == 0)
+        {
+            robot.turnLeft(90, r, trackWidth);
+            robot.driveDistance(4,r);
+            robot.turnRight(90, r, trackWidth);
+            robot.driveDistance(8,r);
+            robot.turnRight(90, r, trackWidth);
+            robot.driveDistance(4,r);
+            robot.turnLeft(90, r, trackWidth);
+            addLetter;
+            addLetter;
+        }
+        else if(currentParkingLetter == 'w' && boxLetter == 'y' && currentParkingNum == 0 && boxNum == 0)
+        {
+            robot.turnLeft(90, r, trackWidth);
+            robot.driveDistance(4,r);
+            robot.turnRight(90, r, trackWidth);
+            robot.driveDistance(8,r);
+            robot.turnRight(90, r, trackWidth);
+            robot.driveDistance(4,r);
+            robot.turnLeft(90, r, trackWidth);
+            addLetter;
+            addLetter;
+        }
+        else if(currentParkingLetter == 'v' && boxLetter == 'w' && currentParkingNum == boxNum)
+        {
+            robot.turnRight(90, r, trackWidth);
+            robot.driveDistance(4,r);
+            robot.turnLeft(90, r, trackWidth);
+            robot.driveDistance(8,r);
+            robot.turnLeft(90, r, trackWidth);
+            robot.driveDistance(4,r);
+            robot.turnRight(90, r, trackWidth);
+            addLetter;
+            addLetter;
+        }
+
+        else{
+        robot.setLEDColor("red");
+            }
+        
+        
+    }
+    
+    
+    
+    else if(challengeNum == 9)
+   {   
+ printf("Plug big wheels" );
+  delay(10000);
+       smooth(140, 355, 3);
+       smooth(360,360, 2);
+       smooth(120, 200, 2);
+       smooth(360, 360, 4);
+       robot.turnLeft(47, r, trackWidth);
+       smooth(360, 360, 4.1);
+       smooth(114, 325, 3);
+       smooth(360, 360, 7);
+   }
+ else{
+ return(0);
+     }
+
+}
