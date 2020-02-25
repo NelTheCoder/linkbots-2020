@@ -1,0 +1,15 @@
+#include <linkbot.h>
+
+char botNumber, cubeLetter;
+int botLetter, cubeNumber;
+
+int main()
+{
+    printf("Please enter what position you would like the cube to be: ");
+    scanf("%c, %i", &cubeLetter, &cubeNumber);
+    
+    printf("Please enter what space you would like the bot to park on: ");
+    scanf("\n%c, %i", &botLetter, &botNumber);
+    
+    if
+}
