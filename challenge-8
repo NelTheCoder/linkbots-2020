@@ -11,5 +11,8 @@ int main()
     printf("Please enter what space you would like the bot to park on: ");
     scanf("\n%c, %i", &botLetter, &botNumber);
     
-    if
+    if(botLetter == 'v')
+    {
+        for(i=0; i  (5-botNumber)
+    }
 }
