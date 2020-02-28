@@ -1,18 +1,74 @@
 #include <linkbot.h>
 
-char botNumber, cubeLetter;
-int botLetter, cubeNumber;
+CLinkbotI robot;
 
-int main()
-{
-    printf("Please enter what position you would like the cube to be: ");
+double r = 1.75;
+double trackWidth = 3.69;
+char botLetter, cubeLetter;
+int botNumber, cubeNumber;
+
+int main(){
+    printf("Please enter what position the cube is in: ");
     scanf("%c, %i", &cubeLetter, &cubeNumber);
     
     printf("Please enter what space you would like the bot to park on: ");
     scanf("\n%c, %i", &botLetter, &botNumber);
     
-    if(botLetter == 'v')
+    if(botLetter == 'v'){
+        robot.driveDistance(4 * (5 - botNumber), r);
+    }
+    else if(botLetter == 'w')
     {
-        for(i=0; i  (5-botNumber)
+        robot.driveDistance(8, r);
+        robot.turnLeft(90, r, trackWidth);
+        robot.driveDistance(4, r);
+        robot.turnRight(90, r, trackWidth);
+        robot.driveDistance(4 * (3 - botNumber), r);
+    }
+    else if(botLetter == 'x')
+    {
+        robot.driveDistance(12, r);
+        robot.turnLeft(90, r, trackWidth);
+        robot.driveDistance(8, r);
+        robot.turnRight(90, r, trackWidth);
+        robot.driveDistance(4 * (2 - botNumber), r);
+    }
+    else if(botLetter == 'y')
+    {
+        if(cubeLetter != 'v' && cubeNumber != 1)
+        {
+            robot.driveDistance(16, r);
+            robot.turnLeft(90, r, trackWidth);
+            robot.driveDistance(12, r);
+            robot.turnRight(90, r, trackWidth);
+            robot.driveDistance(4 * (1 - botNumber), r);
+        }
+        else
+        {
+            //yes
+        }
+    }
+    else if(botLetter == 'z')
+    {
+        if(cubeLetter != 'v' && cubeNumber != 0)
+        {
+            robot.driveDistance(20, r);
+            robot.turnLeft(90, r, trackWidth);
+            robot.driveDistance(16, r);
+        }
+        else
+        {
+            robot.driveDistance(8, r);
+            robot.turnLeft(90, r, trackWidth);
+            robot.driveDistance(4, r);
+            robot.turnRight(90, r, trackWidth);
+            robot.driveDistance(8, r);
+            robot.turnLeft(90, r, trackWidth);
+            robot.driveDistance(8, r);
+            robot.turnRight(90, r, trackWidth);
+            robot.driveDistance(4, r);
+            robot.turnLeft(90, r, trackWidth);
+            robot.driveDistance(4, r);
+        }
     }
 }
